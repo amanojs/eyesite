@@ -10,7 +10,6 @@ app.get('/', (_, res) => {
   res.send('Hello world');
 });
  */
-app.listen(PORT, () => console.log('Start on port 4000.'));
 
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
@@ -50,3 +49,4 @@ function add_table(title: string): void {
     });
 }
  */
+app.listen(PORT, () => console.log('Start on port 4000.'));
