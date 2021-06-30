@@ -1,8 +1,20 @@
-import './top.css'; //cssの適用
 import { Chart } from './chart'; //chartの適用
 
-//ログアウトボタンを押したときの処理
-const logout = document.getElementById('logout');
+//class
+class Eye {
+  left: number;
+  right: number;
+  constructor(left: number, right: number) {
+    this.left = left;
+    this.right = right;
+  }
+
+  //左目の傾向
+  left_Trend() {}
+  //右目の傾向
+  right_Trend() {}
+  //グラフ化
+}
 
 //グラフ描画
 function graph(): void {

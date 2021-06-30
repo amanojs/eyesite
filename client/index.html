@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <!-- ↓font指定のapi -->
-    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet'>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Orbitron'>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/common.css">
+    <link rel="stylesheet" href="src/css/top.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- jQuery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -23,7 +24,7 @@
     <button id="logout">ログアウト</button>
     <script type="module" src="/src/main.ts"></script>
     <div id="button_group">
-      <button id="eyetest" onclick="location.href=''">検査する</button><!-- 検査ボタン -->
+      <button id="eyetest" onclick="location.href='index.html'">検査する</button><!-- 検査ボタン -->
       <button id="training" onclick="location.href=''">トレーニング</button><!-- トレーニングボタン -->
       <button id="nickname">ニックネーム</button><!-- ニックネーム欄 -->
       <canvas id="graph"></canvas><!-- グラフ表示場所 -->
