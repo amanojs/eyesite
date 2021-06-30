@@ -13,10 +13,10 @@ app.get('/', (_, res) => {
 
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'eye_test'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_DATABASE
   });
   return connection;
 }
