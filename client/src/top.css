@@ -1,0 +1,79 @@
+/* Eyesiteの位置 */
+#title{
+    top: 28px;
+    left: 600px;
+    position: absolute;
+}
+
+/* Eyesiteのフォント */
+#font{
+    font-size: 40px;
+    font-family: "Orbitron";
+}
+
+/* EyesiteのEの色 */
+#title_E{
+    color: #0097f7;
+}
+
+/* ログアウトボタン */
+#logout{
+    font-size: 5px;
+    top: 45px;
+    left: 45px;
+    height: 70px;
+    width: 70px;
+    border: 0px;
+    border-radius: 10px; /* ボタンの丸み */
+    text-align: center; /* ボタンの中の文字の位置 */
+    background-color: #02BAD4; /* ボタンの色 */
+    position: fixed;
+}
+
+/* 視力検査の遷移ボタン */
+#eyetest {
+    top: 190px;
+    left: 381px;
+    height: 140px;
+    width: 140px;
+    border: 0px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #C6F364;
+    position: absolute;
+}
+
+/* トレーニングの遷移ボタン */
+#training {
+    top: 190px;
+    left: 544px;
+    height: 140px;
+    width: 140px;
+    border: 0px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #FF6B6B;
+    position: absolute;
+}
+
+/* ニックネームの枠 */
+#nickname {
+    top: 190px;
+    left: 707px;
+    height: 140px;
+    width: 280px;
+    border: 0px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #FBE73B;
+    position: absolute;
+}
+
+/* グラフの位置、大きさ */
+#graph {
+    top: 360px;
+    left: 381px;
+    max-height: 200px; /* グラフサイズ指定(上下) */
+    max-width: 608px; /* グラフサイズ指定(左右) */
+    position: absolute;
+}

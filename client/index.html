@@ -3,12 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <!-- ↓font指定のapi -->
+    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="src/css/common.css">
+
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <title>EyeSite -TOP-</title>
   </head>
   <body>
-    <div id="app"></div>
-    <a href="/profile.html">プロフィールページへ</a>
+    
+    <div id="title">
+      <h1 id="font">
+        <span id="title_E">E</span>yesite
+      </h1>
+    </div>
+    <button id="logout">ログアウト</button>
     <script type="module" src="/src/main.ts"></script>
+    <div id="button_group">
+      <button id="eyetest" onclick="location.href=''">検査する</button><!-- 検査ボタン -->
+      <button id="training" onclick="location.href=''">トレーニング</button><!-- トレーニングボタン -->
+      <button id="nickname">ニックネーム</button><!-- ニックネーム欄 -->
+      <canvas id="graph"></canvas><!-- グラフ表示場所 -->
+    </div>
+
+    <!-- 背景アニメーション -->
+    <div class="area" >
+      <ul class="circles">
+        <li class="red"></li>
+        <li class="yellow"></li>
+        <li class="green"></li>
+        <li class="blue"></li>
+        <li class="gray"></li>
+        <li class="red"></li>
+        <li class="yellow"></li>
+        <li class="green"></li>
+        <li class="blue"></li>
+        <li class="gray"></li>
+        <li class="red"></li>
+        <li class="yellow"></li>
+        <li class="green"></li>
+        <li class="blue"></li>
+        <li class="gray"></li>
+      </ul>
+    </div>
   </body>
 </html>
