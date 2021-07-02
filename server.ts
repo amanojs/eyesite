@@ -17,12 +17,8 @@ app.use(
     }
   })
 );
-/* 
-app.get('/', (_, res) => {
-  res.send('Hello world');
-});
- */
 
+//DB連携クラス
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -32,6 +28,18 @@ async function getConnection(): Promise<mysql.Connection> {
   });
   return connection;
 }
+
+/*
+//セッションチェッククラス
+//nextってコールバック引数がわからん。expressから引っ張ってこれるわけじゃないの？
+function sessionCheck(next) {
+  if (request.session.user && request.session.name) {
+    next();
+  } else {
+    response.redirect('/login');
+  }
+}
+*/
 
 app.get('/', (request, response) => {
   response.send('HelloWorld');
@@ -79,6 +87,7 @@ app.get('/insert', async (request, response) => {
   response.send(result);
 });
 
+//sessionの型の宣言
 declare module 'express-session' {
   interface SessionData {
     user: number;
@@ -86,6 +95,7 @@ declare module 'express-session' {
   }
 }
 
+//ログイン
 app.get('/login', async (request, response) => {
   const connection = await getConnection();
   const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
@@ -98,12 +108,11 @@ app.get('/login', async (request, response) => {
   const resultLen = result.length;
   // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
   // データがない時はレコードの数が0になる
-  console.log(resultLen);
   if (resultLen > 0) {
     request.session.user = result[0].userid;
     request.session.name = result[0].nickname;
-    console.log('session入ったよ');
-    console.log(request.session.name);
+    console.log(resultLen);
+    console.log(request.session.name, request.session.user);
   } else {
     console.log('session入ってないよ');
     //response.render('/login');
@@ -115,7 +124,6 @@ app.get('/login', async (request, response) => {
 app.get('/update', async (request, response) => {
   const connection = await getConnection();
   const sql = 'UPDATE t_user SET mail_address = ?, password = ? , nickname = ?, address = ? WHERE user_id = ?;';
-
   const mailAddress = 'akikan@gmail.com';
   const password = 'akikan';
   const nickname = 'アキカン';
@@ -128,25 +136,4 @@ app.get('/update', async (request, response) => {
   response.send(result);
 });
 
-/* 
-function add_table(title: string): void {
-  let sql = `
-  INSERT INTO books (title ,createdAt ) VALUES
-  ('${title}', now() )
-  `;
-  let connection: mysql.Connection;
-  mysql
-    .createConnection({
-      host: 'localhost',
-      user: 'db_user',
-      password: 'password',
-      database: 'vue1'
-    })
-    .then((conn) => {
-      connection = conn;
-      connection.query(sql);
-      connection.end();
-    });
-}
- */
 app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
