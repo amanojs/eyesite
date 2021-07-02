@@ -4,6 +4,7 @@ import session from 'express-session';
 
 const app: express.Express = express();
 const PORT = 4000;
+require('dotenv').config({ debug: true });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -29,7 +30,6 @@ async function getConnection(): Promise<mysql.Connection> {
     password: process.env.DB_PASS,
     database: process.env.DB_DATABASE
   });
-  console.log('DB接続できてる?');
   return connection;
 }
 
@@ -79,14 +79,12 @@ app.get('/insert', async (request, response) => {
   response.send(result);
 });
 
-/*
 declare module 'express-session' {
   interface SessionData {
     user: number;
     name: string;
   }
 }
-*/
 
 app.get('/login', async (request, response) => {
   const connection = await getConnection();
@@ -101,16 +99,15 @@ app.get('/login', async (request, response) => {
   // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
   // データがない時はレコードの数が0になる
   console.log(resultLen);
-  /*
   if (resultLen > 0) {
-    request.session.user = result[0].userId;
+    request.session.user = result[0].userid;
     request.session.name = result[0].nickname;
     console.log('session入ったよ');
+    console.log(request.session.name);
   } else {
     console.log('session入ってないよ');
     //response.render('/login');
   }
-  */
   response.send(result);
 });
 
