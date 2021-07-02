@@ -1,20 +1,5 @@
 import { Chart } from './chart'; //chartの適用
-
-//class
-class Eye {
-  left: number;
-  right: number;
-  constructor(left: number, right: number) {
-    this.left = left;
-    this.right = right;
-  }
-
-  //左目の傾向
-  left_Trend() {}
-  //右目の傾向
-  right_Trend() {}
-  //グラフ化
-}
+import { Eye } from './eyeTrendClass'; //視力傾向クラスの適用
 
 //グラフ描画
 function graph(): void {
