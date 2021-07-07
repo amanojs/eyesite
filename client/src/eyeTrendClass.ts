@@ -21,17 +21,17 @@ export class Eye {
     const leftResult = nowLeft - backLeft;
     if (leftResult >= 0) {
       //値が0以上の場合値の表示のみ
-      $('#left_result').html(`<p>${leftResult}</p>`);
+      $('#left_result').html(`<p>${leftResult}</p>`); //デバック用の処理
       console.log('正常です');
     } else if (leftResult < 0 && leftResult >= -0.49) {
       //値が0未満及び-0.49(仮)以上の場合(トレーニング)
-      $('#left_result').html(`<p>${leftResult}</p>`);
+      $('#left_result').html(`<p>${leftResult}</p>`); //デバック用の処理
       //トレーニングページへ飛ばすaタグをid=training_hrefとなっているタグに表示される
       $('#training_href').html('<a href="traning.html">トレーニングページへ</a>');
       console.log('視力が下がっています');
     } else {
       //値が-0.5(仮)以下の場合(病院紹介)
-      $('#left_result').html(`<p>${leftResult}</p>`);
+      $('#left_result').html(`<p>${leftResult}</p>`); //デバック用の処理
       console.log('視力が大幅に下がっています');
     }
     return leftResult;
@@ -46,19 +46,20 @@ export class Eye {
     const rightResult = nowRight - backRight;
     if (rightResult >= 0) {
       //値が0以上の場合
-      $('#right_result').html(`<p>${rightResult}</p>`);
+      $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
     } else if (rightResult < 0 && rightResult >= -0.49) {
       //値が0未満及び-0.49(仮)以上の場合(トレーニング)
-      $('#right_result').html(`<p>${rightResult}</p>`);
+      $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
     } else {
       //値が-0.5(仮)以下の場合(病院紹介)
-      $('#right_result').html(`<p>${rightResult}</p>`);
+      $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
     }
     return rightResult;
   }
   //グラフ化
 }
 
+//上のクラスに組み込む予定、傾向計算の処理ができるまでとりあえずここに放置
 //グラフ描画
 function graph(): void {
   //グラフに入れるデータ
