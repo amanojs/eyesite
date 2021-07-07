@@ -47,7 +47,7 @@ function sessionCheck() {
   }
   return;
 }
-*/
+
 const sessionCheck = function () {
   if (request.session.user) {
     console.log('セッションチェック');
@@ -57,7 +57,9 @@ const sessionCheck = function () {
   }
 };
 
+
 app.use('/', sessionCheck);
+*/
 
 app.get('/', (request, response) => {
   response.send('HelloWorld');
