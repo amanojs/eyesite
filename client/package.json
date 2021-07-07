@@ -11,6 +11,7 @@
         "vite": "^2.3.8"
     },
     "dependencies": {
-        "@types/chart.js": "^2.9.32"
+        "@types/chart.js": "^2.9.32",
+        "jquery": "^3.6.0"
     }
 }
