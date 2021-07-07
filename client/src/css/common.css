@@ -4,6 +4,11 @@
 
 @import url('https://fonts.googleapis.com/css?family=Exo:400,700');
 
+/* 
+  背景アニメーションがページの一番上にくるので
+  それぞれのページにz-indexを１以上に設定してください
+*/
+
 body{}
 
 /* 背景アニメーション */
