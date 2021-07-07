@@ -27,11 +27,12 @@ export class Eye {
       //値が0未満及び-0.49(仮)以上の場合(トレーニング)
       $('#left_result').html(`<p>${leftResult}</p>`); //デバック用の処理
       //トレーニングページへ飛ばすaタグをid=training_hrefとなっているタグに表示される
-      $('#training_href').html('<a href="traning.html">トレーニングページへ</a>');
+      $('#training_href').html('<a href="traning.html">トレーニングページに行く</a>');
       console.log('視力が下がっています');
     } else {
       //値が-0.5(仮)以下の場合(病院紹介)
       $('#left_result').html(`<p>${leftResult}</p>`); //デバック用の処理
+      $('#hospital_href').html('<a href="hospital.html">病院の紹介</a>');
       console.log('視力が大幅に下がっています');
     }
     return leftResult;

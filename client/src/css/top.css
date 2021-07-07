@@ -28,6 +28,7 @@
     text-align: center; /* ボタンの中の文字の位置 */
     background-color: #02BAD4; /* ボタンの色 */
     position: fixed;
+    z-index: 99;
 }
 
 /* 視力検査の遷移ボタン */
@@ -41,6 +42,7 @@
     text-align: center;
     background-color: #C6F364;
     position: absolute;
+    z-index: 99;
 }
 
 /* トレーニングの遷移ボタン */
@@ -54,6 +56,7 @@
     text-align: center;
     background-color: #FF6B6B;
     position: absolute;
+    z-index: 99;
 }
 
 /* ニックネームの枠 */
@@ -67,6 +70,7 @@
     text-align: center;
     background-color: #FBE73B;
     position: absolute;
+    z-index: 99;
 }
 
 /* グラフの位置、大きさ */
@@ -76,4 +80,5 @@
     max-height: 200px; /* グラフサイズ指定(上下) */
     max-width: 608px; /* グラフサイズ指定(左右) */
     position: absolute;
+    z-index: 99;
 }
