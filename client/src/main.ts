@@ -9,15 +9,24 @@ app.innerHTML = `
 `;
 
 /**  div id = mapをhtmlから取得 */
-export const divMap = document.querySelector<HTMLDivElement>('#map');
+const divMap = document.querySelector<HTMLDivElement>('#map');
+let hos_data: google.maps.places.PlaceResult[] | null;
 
-export const hos_data = document.querySelector<HTMLDivElement>('#hos_data');
+const maps = new Maps(divMap);
+console.log('おっぱい');
 
 GoogleLoader.load().then(async () => {
+  console.log('oppai');
   /** 位置情報をもとに座標を取得 */
-  const result = await new Maps().getLatLng();
+  const result = await maps.getLatLng();
+  console.log(result);
   /** 地図表示＆病院検索 */
   await GoogleLoader.load().then(() => {
-    new Maps().initMap(result);
+    maps.initMap(result);
+  });
+  /** 検索 */
+  await GoogleLoader.load().then(async () => {
+    hos_data = await maps.getHosdata(result);
+    console.log(hos_data);
   });
 });
