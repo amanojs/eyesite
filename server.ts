@@ -1,16 +1,32 @@
 import express, { request, response } from 'express';
 import * as mysql from 'promise-mysql';
+import session from 'express-session';
 
 const app: express.Express = express();
 const PORT = 4000;
+require('dotenv').config({ debug: true });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-/* 
-app.get('/', (_, res) => {
-  res.send('Hello world');
-});
- */
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 60 * 1000
+    }
+  })
+);
 
+//sessionの型の宣言
+declare module 'express-session' {
+  interface SessionData {
+    user: number;
+    name: string;
+  }
+}
+
+//DB連携クラス
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -20,6 +36,28 @@ async function getConnection(): Promise<mysql.Connection> {
   });
   return connection;
 }
+
+//セッションチェッククラス
+/*
+function sessionCheck() {
+  if (!request.session.user) {
+    console.log('セッションチェック中');
+  } else {
+    response.redirect('/login');
+  }
+  return;
+}
+*/
+const sessionCheck = function () {
+  if (request.session.user) {
+    console.log('セッションチェック');
+  } else {
+    response.redirect('/login');
+    console.log('セッションチェックできてない');
+  }
+};
+
+app.use('/', sessionCheck);
 
 app.get('/', (request, response) => {
   response.send('HelloWorld');
@@ -67,25 +105,44 @@ app.get('/insert', async (request, response) => {
   response.send(result);
 });
 
-/* 
-function add_table(title: string): void {
-  let sql = `
-  INSERT INTO books (title ,createdAt ) VALUES
-  ('${title}', now() )
-  `;
-  let connection: mysql.Connection;
-  mysql
-    .createConnection({
-      host: 'localhost',
-      user: 'db_user',
-      password: 'password',
-      database: 'vue1'
-    })
-    .then((conn) => {
-      connection = conn;
-      connection.query(sql);
-      connection.end();
-    });
-}
- */
+//ログイン
+app.get('/login', async (request, response) => {
+  const connection = await getConnection();
+  const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
+  const mailAddress = 'yamaso@gmail.com';
+  const password = 12345;
+  const data = [mailAddress, password];
+  const result = await connection.query(sql, data);
+  // 認証出来たらちゃんとデータが取れる
+  // 認証失敗したら空のデータが入っている？
+  // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
+  // データがない時はレコードの数が0になる
+  if (result.length > 0) {
+    request.session.user = result[0].user_id;
+    request.session.name = result[0].nickname;
+    console.log(result.length);
+  } else {
+    console.log('session入ってないよ');
+    //response.render('/login');
+  }
+  console.log(request.session.name, request.session.user);
+  response.send(result);
+});
+
+// UPDATEのテスト上のSELECTとやってることは同じ
+app.get('/update', async (request, response) => {
+  const connection = await getConnection();
+  const sql = 'UPDATE t_user SET mail_address = ?, password = ? , nickname = ?, address = ? WHERE user_id = ?;';
+  const mailAddress = 'akikan@gmail.com';
+  const password = 'akikan';
+  const nickname = 'アキカン';
+  const address = '東京都';
+  const userId = 2;
+  const data = [mailAddress, password, nickname, address, userId];
+
+  const result = await connection.query(sql, data);
+  connection.end();
+  response.send(result);
+});
+
 app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
