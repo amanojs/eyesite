@@ -9,7 +9,9 @@ export class Maps {
     this.divMap = divMap;
   }
 
-  /** 座標取得処理 */
+  /** 座標取得処理
+   * @returns 緯度経度
+   */
   async getLatLng(): Promise<{ lat: number; lng: number }> {
     return new Promise((resolve) => {
       navigator.geolocation.getCurrentPosition(function (position) {
@@ -20,7 +22,9 @@ export class Maps {
     });
   }
 
-  /** マップ表示処理 */
+  /** マップ表示処理
+   * @param 緯度経度
+   */
   initMap(position: { lat: number; lng: number }): void {
     if (!this.divMap) return;
     this.map = new google.maps.Map(this.divMap, {
