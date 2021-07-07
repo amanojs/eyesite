@@ -1,6 +1,9 @@
 import { Chart } from './chart'; //chartの適用
 import { Eye } from './eyeTrendClass'; //視力傾向クラスの適用
 
+const Eye1 = new Eye([1, 0.8], [1, 1]);
+console.log(Eye1.leftTrend());
+
 //グラフ描画
 function graph(): void {
   //グラフに入れるデータ
