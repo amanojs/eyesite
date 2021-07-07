@@ -1,4 +1,4 @@
-import express, { request, response } from 'express';
+import express from 'express';
 import * as mysql from 'promise-mysql';
 import session from 'express-session';
 
@@ -38,46 +38,32 @@ async function getConnection(): Promise<mysql.Connection> {
 }
 
 //セッションチェッククラス
-/*
-function sessionCheck() {
-  if (!request.session.user) {
+function sessionCheck(req: express.Request, res: express.Response) {
+  if (req.session.user) {
     console.log('セッションチェック中');
+    //ここにはセッションチェックしたあとなにするか入れる。もともとはnext()とかいれるつもりだった。
   } else {
-    response.redirect('/login');
+    res.redirect('/login');
   }
-  return;
 }
 
-const sessionCheck = function () {
-  if (request.session.user) {
-    console.log('セッションチェック');
-  } else {
-    response.redirect('/login');
-    console.log('セッションチェックできてない');
-  }
-};
-
-
-app.use('/', sessionCheck);
-*/
-
-app.get('/', (request, response) => {
-  response.send('HelloWorld');
+app.get('/', (req, res) => {
+  res.send('HelloWorld');
 });
 
 // Selectのテスト
 // 基本的にSQL文の変数にちゃんとしたSQL文を入れて実行するだけ
-app.get('/select', async (request, response) => {
+app.get('/select', async (req, res) => {
   const connection = await getConnection();
   const sql = 'select * from m_secret_question';
   const result = await connection.query(sql);
   connection.end();
-  response.send(result);
+  res.send(result);
 });
 
 // Insertのテスト、プリペアドステートメントは問題なく出来た
 // 書き方が不細工なので、後でかっこよくしたい
-app.get('/insert', async (request, response) => {
+app.get('/insert', async (req, res) => {
   const connection = await getConnection();
   const sql = 'INSERT INTO t_eye_test_result(eye_test_date, eye_test_score, user_id, eye_way) VALUES(?, ?, ?, ?)';
 
@@ -89,10 +75,10 @@ app.get('/insert', async (request, response) => {
 
   const result = await connection.query(sql, data);
   connection.end();
-  response.send(result);
+  res.send(result);
 });
 
-app.get('/insert', async (request, response) => {
+app.get('/insert', async (req, res) => {
   const connection = await getConnection();
   const sql = 'INSERT INTO t_eye_test_result(eye_test_date, eye_test_score, user_id, eye_way) VALUES(?, ?, ?, ?)';
 
@@ -104,11 +90,11 @@ app.get('/insert', async (request, response) => {
 
   const result = await connection.query(sql, data);
   connection.end();
-  response.send(result);
+  res.send(result);
 });
 
 //ログイン
-app.get('/login', async (request, response) => {
+app.get('/login', async (req, res) => {
   const connection = await getConnection();
   const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
   const mailAddress = 'yamaso@gmail.com';
@@ -120,19 +106,20 @@ app.get('/login', async (request, response) => {
   // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
   // データがない時はレコードの数が0になる
   if (result.length > 0) {
-    request.session.user = result[0].user_id;
-    request.session.name = result[0].nickname;
+    req.session.user = result[0].user_id;
+    req.session.name = result[0].nickname;
     console.log(result.length);
   } else {
     console.log('session入ってないよ');
-    //response.render('/login');
+    //res.render('/login');
   }
-  console.log(request.session.name, request.session.user);
-  response.send(result);
+  console.log(req.session.name, req.session.user);
+  sessionCheck(req, res);
+  res.send(result);
 });
 
 // UPDATEのテスト上のSELECTとやってることは同じ
-app.get('/update', async (request, response) => {
+app.get('/update', async (req, res) => {
   const connection = await getConnection();
   const sql = 'UPDATE t_user SET mail_address = ?, password = ? , nickname = ?, address = ? WHERE user_id = ?;';
   const mailAddress = 'akikan@gmail.com';
@@ -144,7 +131,56 @@ app.get('/update', async (request, response) => {
 
   const result = await connection.query(sql, data);
   connection.end();
-  response.send(result);
+  res.send(result);
+});
+
+app.get('/selectEyeresult', async (req, res) => {
+  const connection = await getConnection();
+  // 左目のSQL文
+  let sql =
+    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ? AND eye_way = 0';
+
+  const userId = req.query.id;
+  const result = await connection.query(sql, userId);
+  console.log(result.length);
+
+  const leftEyeDate: string[] = [];
+  const leftEyeWay: number[] = [];
+  const leftEyeScore: number[] = [];
+
+  const rightEyeDate: string[] = [];
+  const rightEyeWay: string[] = [];
+  const rightEyeScore: string[] = [];
+
+  for (let i = 0; i < result.length; i++) {
+    leftEyeDate[i] = result[i].eye_date;
+    leftEyeWay[i] = result[i].eye_way;
+    leftEyeScore[i] = result[i].eye_test_score;
+  }
+
+  console.log(leftEyeDate);
+  console.log(leftEyeWay);
+  console.log(leftEyeScore);
+
+  // 右目のSQL文
+  sql =
+    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ? AND eye_way = 1';
+
+  const result2 = await connection.query(sql, userId);
+
+  for (let i = 0; i < result2.length; i++) {
+    rightEyeDate[i] = result2[i].eye_date;
+    rightEyeWay[i] = result2[i].eye_way;
+    rightEyeScore[i] = result2[i].eye_test_score;
+  }
+
+  console.log(rightEyeDate);
+  console.log(rightEyeWay);
+  console.log(rightEyeScore);
+
+  res.send(result);
+
+  connection.end();
 });
 
 app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
