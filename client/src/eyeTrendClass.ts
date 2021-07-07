@@ -52,7 +52,7 @@ export class Eye {
       $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
     } else {
       //値が-0.5(仮)以下の場合(病院紹介)
-      $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
+      $('#right_result').html(`<p>${rightResult}</p>`);
     }
     return rightResult;
   }
