@@ -18,6 +18,14 @@ app.use(
   })
 );
 
+//sessionの型の宣言
+declare module 'express-session' {
+  interface SessionData {
+    user: number;
+    name: string;
+  }
+}
+
 //DB連携クラス
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
@@ -29,17 +37,27 @@ async function getConnection(): Promise<mysql.Connection> {
   return connection;
 }
 
-/*
 //セッションチェッククラス
-//nextってコールバック引数がわからん。expressから引っ張ってこれるわけじゃないの？
-function sessionCheck(next) {
-  if (request.session.user && request.session.name) {
-    next();
+/*
+function sessionCheck() {
+  if (!request.session.user) {
+    console.log('セッションチェック中');
   } else {
     response.redirect('/login');
   }
+  return;
 }
 */
+const sessionCheck = function () {
+  if (request.session.user) {
+    console.log('セッションチェック');
+  } else {
+    response.redirect('/login');
+    console.log('セッションチェックできてない');
+  }
+};
+
+app.use('/', sessionCheck);
 
 app.get('/', (request, response) => {
   response.send('HelloWorld');
@@ -87,14 +105,6 @@ app.get('/insert', async (request, response) => {
   response.send(result);
 });
 
-//sessionの型の宣言
-declare module 'express-session' {
-  interface SessionData {
-    user: number;
-    name: string;
-  }
-}
-
 //ログイン
 app.get('/login', async (request, response) => {
   const connection = await getConnection();
@@ -105,18 +115,17 @@ app.get('/login', async (request, response) => {
   const result = await connection.query(sql, data);
   // 認証出来たらちゃんとデータが取れる
   // 認証失敗したら空のデータが入っている？
-  const resultLen = result.length;
   // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
   // データがない時はレコードの数が0になる
-  if (resultLen > 0) {
-    request.session.user = result[0].userid;
+  if (result.length > 0) {
+    request.session.user = result[0].user_id;
     request.session.name = result[0].nickname;
-    console.log(resultLen);
-    console.log(request.session.name, request.session.user);
+    console.log(result.length);
   } else {
     console.log('session入ってないよ');
     //response.render('/login');
   }
+  console.log(request.session.name, request.session.user);
   response.send(result);
 });
 
