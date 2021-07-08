@@ -27,10 +27,16 @@ export class Maps {
    */
   initMap(position: { lat: number; lng: number }): void {
     if (!this.divMap) return;
+    const center = { lat: position.lat, lng: position.lng };
     this.map = new google.maps.Map(this.divMap, {
-      center: { lat: position.lat, lng: position.lng },
       mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center,
       zoom: 18
+    });
+    const marker = new google.maps.Marker({
+      // マーカーの追加
+      position: center, // マーカーを立てる位置を指定
+      map: this.map // マーカーを立てる地図を指定
     });
   }
 
