@@ -10,8 +10,11 @@ app.innerHTML = `
 
 /**  div id = mapをhtmlから取得 */
 const divMap = document.querySelector<HTMLDivElement>('#map');
+
 /** 病院検索で受け取ったオブジェクトを格納するための変数 */
 let hos_data: google.maps.places.PlaceResult[] | null;
+
+// 住所の格納場所の親要素取得
 const hospital_box = document.querySelector<HTMLDivElement>('#hospital_box');
 
 /** Mapsクラスを実体化 */
@@ -32,17 +35,29 @@ GoogleLoader.load().then(async () => {
 
     // html表示
     if (hos_data) {
+      // 取得した病院データの数だけ繰り返す
       for (let i = 0; i < hos_data?.length; i++) {
-        console.log('a');
         const elem = document.createElement('div');
-        const br = document.createElement('br');
+        // 生成されたHTML要素がクリックされた時の処理
+        elem.onclick = () => {
+          if (hos_data) {
+            moveMap(hos_data[i].formatted_address || 'undefind');
+          }
+        };
         // id
         elem.id = 'hos_address' + i;
         // テキスト内容
         elem.innerHTML = hos_data[i].formatted_address;
         hospital_box?.appendChild(elem);
-        hospital_box?.appendChild(br);
       }
     }
   });
 });
+
+/** 地図移動 */
+function moveMap(address: string) {
+  console.log('address:', address);
+  GoogleLoader.load().then(() => {
+    maps.move(address);
+  });
+}

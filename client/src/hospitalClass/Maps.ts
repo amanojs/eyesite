@@ -56,4 +56,20 @@ export class Maps {
       );
     });
   }
+
+  move(address_data: string): void {
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode(
+      {
+        address: address_data
+      },
+      (results, status) => {
+        if (status == 'OK' && results![0].geometry?.location !== undefined) {
+          const { lat, lng } = results![0].geometry.location;
+          this.initMap({ lat: lat(), lng: lng() });
+        }
+      }
+    );
+  }
 }
