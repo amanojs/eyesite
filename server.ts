@@ -26,7 +26,7 @@ declare module 'express-session' {
   }
 }
 
-//DB連携クラス
+//DB連携関数
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -37,13 +37,14 @@ async function getConnection(): Promise<mysql.Connection> {
   return connection;
 }
 
-//セッションチェッククラス
+//セッションチェック関数
 function sessionCheck(req: express.Request, res: express.Response) {
   if (req.session.user) {
     console.log('セッションチェック中');
     //ここにはセッションチェックしたあとなにするか入れる。もともとはnext()とかいれるつもりだった。
   } else {
     res.redirect('/login');
+    //ログインページに飛ぶ処理を書く。
   }
 }
 
@@ -116,6 +117,37 @@ app.get('/login', async (req, res) => {
   console.log(req.session.name, req.session.user);
   sessionCheck(req, res);
   res.send(result);
+});
+
+//ログインpost:ver
+app.post('/loginpost', async (req, res) => {
+  const connection = await getConnection();
+  const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
+  const mailAddress = req.body.mailaddress;
+  const password = req.body.password;
+  const data = [mailAddress, password];
+  const result = await connection.query(sql, data);
+  console.log(req.body.mailaddress, req.body.password);
+  // 認証出来たらちゃんとデータが取れる
+  // 認証失敗したら空のデータが入っている？
+  // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
+  // データがない時はレコードの数が0になる
+  if (result.length > 0) {
+    req.session.user = result[0].user_id;
+    req.session.name = result[0].nickname;
+    console.log(result.length);
+  } else {
+    console.log('session入ってないよ');
+    //res.render('/login');
+  }
+  console.log(req.session.name, req.session.user);
+  sessionCheck(req, res);
+  res.send(result);
+});
+
+app.get('/logout', (req) => {
+  delete req.session.user;
+  console.log('ログアウト');
 });
 
 // UPDATEのテスト上のSELECTとやってることは同じ
