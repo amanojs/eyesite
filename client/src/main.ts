@@ -25,33 +25,32 @@ GoogleLoader.load().then(async () => {
   const result = await maps.getLatLng();
   console.log(result);
   /** 地図表示＆病院検索 */
-  await GoogleLoader.load().then(() => {
-    maps.initMap(result);
-  });
+  maps.initMap(result);
   /** 検索 */
-  await GoogleLoader.load().then(async () => {
-    hos_data = await maps.getHosdata(result);
-    console.log(hos_data);
+  hos_data = await maps.getHosdata(result);
+  console.log(hos_data);
 
-    // html表示
-    if (hos_data) {
-      // 取得した病院データの数だけ繰り返す
-      for (let i = 0; i < hos_data?.length; i++) {
-        const elem = document.createElement('div');
-        // 生成されたHTML要素がクリックされた時の処理
-        elem.onclick = () => {
-          if (hos_data) {
-            moveMap(hos_data[i].formatted_address || 'undefind');
-          }
-        };
-        // id
-        elem.id = 'hos_address' + i;
-        // テキスト内容
-        elem.innerHTML = hos_data[i].formatted_address;
+  // html表示
+  if (hos_data) {
+    // 取得した病院データの数だけ繰り返す
+    for (let i = 0; i < hos_data?.length; i++) {
+      const elem = document.createElement('div');
+      // 生成されたHTML要素がクリックされた時の処理
+      elem.onclick = () => {
+        if (hos_data) {
+          moveMap(hos_data[i].formatted_address || 'undefind');
+        }
+      };
+      // id
+      elem.id = 'hos_address' + i;
+      // テキスト内容
+      const hospital_address = hos_data[i].formatted_address;
+      if (hospital_address) {
+        elem.innerHTML = hospital_address;
         hospital_box?.appendChild(elem);
       }
     }
-  });
+  }
 });
 
 /** 地図移動 */
