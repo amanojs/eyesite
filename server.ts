@@ -29,7 +29,6 @@ async function getConnection(): Promise<mysql.Connection> {
   return connection;
 }
 
-/*
 //セッションチェッククラス
 //nextってコールバック引数がわからん。expressから引っ張ってこれるわけじゃないの？
 function sessionCheck(next) {
@@ -39,7 +38,6 @@ function sessionCheck(next) {
     response.redirect('/login');
   }
 }
-*/
 
 app.get('/', (request, response) => {
   response.send('HelloWorld');
@@ -96,7 +94,7 @@ declare module 'express-session' {
 }
 
 //ログイン
-app.get('/login', async (request, response) => {
+app.get('/login', async (request, response, next) => {
   const connection = await getConnection();
   const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
   const mailAddress = 'yamaso@gmail.com';
@@ -117,6 +115,7 @@ app.get('/login', async (request, response) => {
     console.log('session入ってないよ');
     //response.render('/login');
   }
+  //sessionCheck(next);
   response.send(result);
 });
 
