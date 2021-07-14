@@ -26,7 +26,7 @@ declare module 'express-session' {
   }
 }
 
-//DB連携クラス
+//DB連携関数
 async function getConnection(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -37,13 +37,14 @@ async function getConnection(): Promise<mysql.Connection> {
   return connection;
 }
 
-//セッションチェッククラス
+//セッションチェック関数
 function sessionCheck(req: express.Request, res: express.Response) {
   if (req.session.user) {
     console.log('セッションチェック中');
     //ここにはセッションチェックしたあとなにするか入れる。もともとはnext()とかいれるつもりだった。
   } else {
     res.redirect('/login');
+    //ログインページに飛ぶ処理を書く。
   }
 }
 
@@ -118,6 +119,39 @@ app.get('/login', async (req, res) => {
   res.send(result);
 });
 
+//ログインpost:ver
+app.post('/loginpost', async (req, res) => {
+  const connection = await getConnection();
+  const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
+  const mailAddress = req.body.mailaddress;
+  const password = req.body.password;
+  const data = [mailAddress, password];
+  const result = await connection.query(sql, data);
+  console.log(req.body.mailaddress, req.body.password);
+  // 認証出来たらちゃんとデータが取れる
+  // 認証失敗したら空のデータが入っている？
+  // .lengthでデータの数を調べると、データがある時はレコードの数が取得できる
+  // データがない時はレコードの数が0になる
+  if (result.length > 0) {
+    req.session.user = result[0].user_id;
+    req.session.name = result[0].nickname;
+    console.log(result.length);
+  } else {
+    console.log('session入ってないよ');
+    //res.render('/login');
+  }
+  //sessionCheck(next);
+  res.send(result);
+  console.log(req.session.name, req.session.user);
+  sessionCheck(req, res);
+  res.send(result);
+});
+
+app.get('/logout', (req) => {
+  delete req.session.user;
+  console.log('ログアウト');
+});
+
 // UPDATEのテスト上のSELECTとやってることは同じ
 app.get('/update', async (req, res) => {
   const connection = await getConnection();
@@ -134,53 +168,60 @@ app.get('/update', async (req, res) => {
   res.send(result);
 });
 
+// 視力の結果を右目と左目でそれぞれ取得
 app.get('/selectEyeresult', async (req, res) => {
   const connection = await getConnection();
-  // 左目のSQL文
-  let sql =
-    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ? AND eye_way = 0';
-
   const userId = req.query.id;
+  // ユーザーIDを元に視力検査の結果を取得
+  const sql =
+    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ?';
   const result = await connection.query(sql, userId);
-  console.log(result.length);
-
-  const leftEyeDate: string[] = [];
-  const leftEyeWay: number[] = [];
-  const leftEyeScore: number[] = [];
-
-  const rightEyeDate: string[] = [];
-  const rightEyeWay: string[] = [];
-  const rightEyeScore: string[] = [];
-
-  for (let i = 0; i < result.length; i++) {
-    leftEyeDate[i] = result[i].eye_date;
-    leftEyeWay[i] = result[i].eye_way;
-    leftEyeScore[i] = result[i].eye_test_score;
-  }
-
-  console.log(leftEyeDate);
-  console.log(leftEyeWay);
-  console.log(leftEyeScore);
-
-  // 右目のSQL文
-  sql =
-    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ? AND eye_way = 1';
-
-  const result2 = await connection.query(sql, userId);
-
-  for (let i = 0; i < result2.length; i++) {
-    rightEyeDate[i] = result2[i].eye_date;
-    rightEyeWay[i] = result2[i].eye_way;
-    rightEyeScore[i] = result2[i].eye_test_score;
-  }
-
-  console.log(rightEyeDate);
-  console.log(rightEyeWay);
-  console.log(rightEyeScore);
-
-  res.send(result);
-
   connection.end();
+
+  // インスタンス化
+  const eyeresult = new EyeResult(result);
+  await eyeresult.SelectResult();
+  // eyeresultの中に視力の結果が左目と右目に分けて保存してある。
+  console.log(eyeresult);
 });
+
+app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
+
+// 視力の結果をわかりやすくまとめるクラス
+class EyeResult {
+  leftEyeDate: Date[] = [];
+  leftEyeWay: number[] = [];
+  leftEyeScore: number[] = [];
+
+  rightEyeDate: Date[] = [];
+  rightEyeWay: number[] = [];
+  rightEyeScore: number[] = [];
+
+  result: any;
+
+  constructor(result: any) {
+    this.result = result;
+  }
+
+  async SelectResult() {
+    let left = 0;
+    let right = 0;
+
+    // データの件数だけ繰り返し
+    for (let i = 0; i < this.result.length; i++) {
+      if (this.result[i].eye_way === 0) {
+        this.leftEyeDate[left] = this.result[i].eye_date;
+        this.leftEyeWay[left] = this.result[i].eye_way;
+        this.leftEyeScore[left] = this.result[i].eye_test_score;
+        left = left + 1;
+      } else {
+        this.rightEyeDate[right] = this.result[i].eye_date;
+        this.rightEyeWay[right] = this.result[i].eye_way;
+        this.rightEyeScore[right] = this.result[i].eye_test_score;
+        right = right + 1;
+      }
+    }
+  }
+}
 
 app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
