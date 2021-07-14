@@ -43,21 +43,46 @@ export class EyeTrend {
     //最新の値と前回の値の差を計算する処理
     this.rightResult = nowRight - backRight;
   }
-  //傾向の値によって表示する物の変更
-  //0=病院紹介ページ遷移ボタン 1=トレーニングページ遷移ボタン 2=表示なし
-  //フラグ処理風
+  //傾向の値によって表示する物の変更 返す値はとりあえずフラグ処理風
+  //左目のアップダウンの矢印表示(検査結果のデザイン参照)
+  leftDisplay(): number {
+    if (this.leftResult < 0) {
+      //視力が上がっていた場合
+      return 0;
+    } else if (this.leftResult == 0) {
+      //視力が変わっていなかった場合
+      return 1;
+    } else {
+      //視力が下がっていた場合
+      return 2;
+    }
+  }
+  //右目のアップダウンの矢印表示(検査結果のデザイン参照)
+  rightDisplay(): number {
+    if (this.rightResult < 0) {
+      //視力が上がっていた場合
+      return 0;
+    } else if (this.rightResult == 0) {
+      //視力が変わっていなかった場合
+      return 1;
+    } else {
+      //視力が下がっていた場合
+      return 2;
+    }
+  }
+  //トレーニングや病院紹介のボタン表示
   buttonDisplay(): number {
     if (this.leftResult <= -0.5 || this.rightResult <= -0.5) {
-      //視力が大幅に下がっていた場合
+      //視力が大幅に下がっていた場合 病院紹介
       return 2;
     } else if (
       (this.leftResult < 0 && this.leftResult >= -0.49) ||
       (this.rightResult < 0 && this.rightResult >= -0.49)
     ) {
-      //視力が下がっていた場合
+      //視力が下がっていた場合 トレーニング
       return 1;
     } else {
-      //視力が下がっていなかった場合
+      //視力が下がっていなかった場合 表示なし
       return 0;
     }
   }

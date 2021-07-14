@@ -9,8 +9,12 @@ Eye1.leftTrend();
 Eye1.rightTrend();
 console.log(Eye1.leftResult);
 console.log(Eye1.rightResult);
-//警告の表示
-Eye1.display();
-console.log(Eye1.display());
+//左目結果の傾向
+Eye1.leftDisplay();
+//右目結果の傾向
+Eye1.rightDisplay();
+//ボタン(トレーニングor病院紹介)の表示
+Eye1.buttonDisplay();
+console.log(Eye1.buttonDisplay());
 //グラフの出力
 Eye1.graph();
