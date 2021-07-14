@@ -3,66 +3,68 @@ import { Chart } from './chart'; //chartの適用 グラフ描画
 import moment from 'moment';
 
 export class EyeTrend {
-  date: string;
   //左目の配列
-  left: number[];
+  public left: number[];
   //右目の配列
-  right: number[];
+  public right: number[];
+  public leftResult: number;
+  public rightResult: number;
   //グラフで使う左目の配列
-  leftGraph: number[];
+  public leftGraph: number[];
   //グラフで使う左目の配列
-  rightGraph: number[];
-  constructor(date: string, left: number[], right: number[], leftGraph: number[], rightGraph: number[]) {
-    this.date = date;
+  public rightGraph: number[];
+  //グラフの日付
+  //public date: string;
+  constructor(left: number[], right: number[], leftGraph: number[], rightGraph: number[]) {
+    //this.date = date;
     this.left = left;
     this.right = right;
+    this.leftResult = 0;
+    this.rightResult = 0;
     this.leftGraph = leftGraph;
     this.rightGraph = rightGraph;
   }
   //値の取得
   //左目の傾向
-  leftTrend(): number {
+  leftTrend(): void {
     //今回の値 popで配列の後ろの値からとってくる
     const nowLeft: number = this.left.pop() as number;
     //前回の値
     const backLeft: number = this.left.pop() as number;
-    //最新の値と前回の値を比べる処理
-    const leftResult: number = nowLeft - backLeft;
-    return leftResult;
+    //最新の値と前回の値の差を計算する処理
+    this.leftResult = nowLeft - backLeft;
   }
   //右目の傾向
-  rightTrend(): number {
+  rightTrend(): void {
     //今回の値 popで配列の後ろの値からとってくる
     const nowRight: number = this.right.pop() as number;
     //前回の値
     const backRight: number = this.right.pop() as number;
-    //最新の値と前回の値を比べる処理
-    const rightResult = nowRight - backRight;
-    if (rightResult >= 0) {
-      //値が0以上の場合
-      $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
-    } else if (rightResult < 0 && rightResult >= -0.49) {
-      //値が0未満及び-0.49(仮)以上の場合(トレーニング)
-      $('#right_result').html(`<p>${rightResult}</p>`); //デバック用の処理
-    } else {
-      //値が-0.5(仮)以下の場合(病院紹介)
-      $('#right_result').html(`<p>${rightResult}</p>`);
-    }
-    return rightResult;
+    //最新の値と前回の値の差を計算する処理
+    this.rightResult = nowRight - backRight;
   }
   //傾向の値によって表示する物の変更
-  alert(): number {
-    if (this.leftTrend() >= 0 || this.rightTrend() >= 0) {
-      return 0;
-      console.log('正常です');
-    } else {
+  //0=病院紹介ページ遷移ボタン 1=トレーニングページ遷移ボタン 2=表示なし
+  //フラグ処理風
+  buttonDisplay(): number {
+    if (this.leftResult <= -0.5 || this.rightResult <= -0.5) {
+      //視力が大幅に下がっていた場合
+      return 2;
+    } else if (
+      (this.leftResult < 0 && this.leftResult >= -0.49) ||
+      (this.rightResult < 0 && this.rightResult >= -0.49)
+    ) {
+      //視力が下がっていた場合
       return 1;
+    } else {
+      //視力が下がっていなかった場合
+      return 0;
     }
   }
   //グラフ化
   graph(): void {
-    this.date = moment().format('YYYY-MM-DD');
-    console.log(this.date);
+    //this.date = moment().format('YYYY-MM-DD');
+    //console.log(this.date);
     //グラフに入れるデータ
     const data = {
       //日付
