@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import * as mysql from 'promise-mysql';
 import session from 'express-session';
 
@@ -145,9 +145,10 @@ app.post('/loginpost', async (req, res) => {
   res.send(result);
 });
 
-app.get('/logout', (req) => {
-  delete req.session.user;
-  console.log('ログアウト');
+app.get('/logout', (req, res) => {
+  delete req.session.user, req.session.name;
+  console.log(req.session.user, req.session.name);
+  res.send();
 });
 
 // UPDATEのテスト上のSELECTとやってることは同じ
