@@ -140,6 +140,8 @@ app.post('/loginpost', async (req, res) => {
     console.log('session入ってないよ');
     //res.render('/login');
   }
+  //sessionCheck(next);
+  res.send(result);
   console.log(req.session.name, req.session.user);
   sessionCheck(req, res);
   res.send(result);
@@ -167,53 +169,60 @@ app.get('/update', async (req, res) => {
   res.send(result);
 });
 
+// 視力の結果を右目と左目でそれぞれ取得
 app.get('/selectEyeresult', async (req, res) => {
   const connection = await getConnection();
-  // 左目のSQL文
-  let sql =
-    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ? AND eye_way = 0';
-
   const userId = req.query.id;
+  // ユーザーIDを元に視力検査の結果を取得
+  const sql =
+    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ?';
   const result = await connection.query(sql, userId);
-  console.log(result.length);
-
-  const leftEyeDate: string[] = [];
-  const leftEyeWay: number[] = [];
-  const leftEyeScore: number[] = [];
-
-  const rightEyeDate: string[] = [];
-  const rightEyeWay: string[] = [];
-  const rightEyeScore: string[] = [];
-
-  for (let i = 0; i < result.length; i++) {
-    leftEyeDate[i] = result[i].eye_date;
-    leftEyeWay[i] = result[i].eye_way;
-    leftEyeScore[i] = result[i].eye_test_score;
-  }
-
-  console.log(leftEyeDate);
-  console.log(leftEyeWay);
-  console.log(leftEyeScore);
-
-  // 右目のSQL文
-  sql =
-    'SELECT eye_test_id, DATE_FORMAT(eye_test_date, "%Y-%m-%d") AS eye_date, eye_test_score, user_id, eye_way FROM t_eye_test_result WHERE user_id = ? AND eye_way = 1';
-
-  const result2 = await connection.query(sql, userId);
-
-  for (let i = 0; i < result2.length; i++) {
-    rightEyeDate[i] = result2[i].eye_date;
-    rightEyeWay[i] = result2[i].eye_way;
-    rightEyeScore[i] = result2[i].eye_test_score;
-  }
-
-  console.log(rightEyeDate);
-  console.log(rightEyeWay);
-  console.log(rightEyeScore);
-
-  res.send(result);
-
   connection.end();
+
+  // インスタンス化
+  const eyeresult = new EyeResult(result);
+  await eyeresult.SelectResult();
+  // eyeresultの中に視力の結果が左目と右目に分けて保存してある。
+  console.log(eyeresult);
 });
+
+app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
+
+// 視力の結果をわかりやすくまとめるクラス
+class EyeResult {
+  leftEyeDate: Date[] = [];
+  leftEyeWay: number[] = [];
+  leftEyeScore: number[] = [];
+
+  rightEyeDate: Date[] = [];
+  rightEyeWay: number[] = [];
+  rightEyeScore: number[] = [];
+
+  result: any;
+
+  constructor(result: any) {
+    this.result = result;
+  }
+
+  async SelectResult() {
+    let left = 0;
+    let right = 0;
+
+    // データの件数だけ繰り返し
+    for (let i = 0; i < this.result.length; i++) {
+      if (this.result[i].eye_way === 0) {
+        this.leftEyeDate[left] = this.result[i].eye_date;
+        this.leftEyeWay[left] = this.result[i].eye_way;
+        this.leftEyeScore[left] = this.result[i].eye_test_score;
+        left = left + 1;
+      } else {
+        this.rightEyeDate[right] = this.result[i].eye_date;
+        this.rightEyeWay[right] = this.result[i].eye_way;
+        this.rightEyeScore[right] = this.result[i].eye_test_score;
+        right = right + 1;
+      }
+    }
+  }
+}
 
 app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
