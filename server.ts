@@ -112,17 +112,19 @@ app.get('/login', async (req, res) => {
     console.log(result.length);
   } else {
     console.log('session入ってないよ');
+    return false;
     //res.render('/login');
   }
   console.log(req.session.name, req.session.user);
   sessionCheck(req, res);
-  res.send(result);
+  res.send();
+  connection.end();
 });
 
 //ログインpost:ver
 app.post('/loginpost', async (req, res) => {
   const connection = await getConnection();
-  const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
+  const sql = 'SELECT user_id, nickname FROM t_user WHERE mail_address = ? AND password = ?;';
   const mailAddress = req.body.mailaddress;
   const password = req.body.password;
   const data = [mailAddress, password];
@@ -138,18 +140,42 @@ app.post('/loginpost', async (req, res) => {
     console.log(result.length);
   } else {
     console.log('session入ってないよ');
+    return false;
     //res.render('/login');
   }
-  //sessionCheck(next);
-  res.send(result);
+  res.send(result.user_id);
   console.log(req.session.name, req.session.user);
+  connection.end();
   sessionCheck(req, res);
-  res.send(result);
 });
 
-app.get('/logout', (req) => {
+//新規登録
+app.post('/newuser', async (req, res) => {
+  const connection = await getConnection();
+  const sql =
+    'INSERT INTO t_user(mail_address, password, nickname, secret_id, secret_answer, birthday, address) VALUES(?, ?, ?, ?, ?, ?, ?)';
+  const mailAddress = req.body.mailaddress;
+  const password = req.body.password;
+  const nickname = req.body.nickname;
+  const secret_id = req.body.secret_id;
+  const secret_answer = req.body.secret_answer;
+  const birthday = req.body.birthday;
+  const address = req.body.address;
+  const data = [mailAddress, password, nickname, secret_id, secret_answer, birthday, address];
+  const result = await connection.query(sql, data);
+  console.log(data);
+  res.send(result);
+  connection.end();
+});
+
+app.get('/logout', (req, res) => {
   delete req.session.user;
-  console.log('ログアウト');
+  delete req.session.name;
+  const session = req.session.user;
+  const session2 = req.session.name;
+  const data = [session, session2];
+  console.log(req.session.user, req.session.name);
+  res.send(data);
 });
 
 // UPDATEのテスト上のSELECTとやってることは同じ
@@ -183,6 +209,7 @@ app.get('/selectEyeresult', async (req, res) => {
   await eyeresult.SelectResult();
   // eyeresultの中に視力の結果が左目と右目に分けて保存してある。
   console.log(eyeresult);
+  res.send(result);
 });
 
 app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
@@ -224,4 +251,64 @@ class EyeResult {
   }
 }
 
-app.listen(PORT, () => console.log(`Start on port ${PORT}.`));
+// パスワード変更の処理１
+app.post('/checkMailaddress', async (req, res) => {
+  const connection = await getConnection();
+  const sql = 'SELECT mail_address FROM t_user WHERE mail_address = ?';
+  const mailAddress = req.body.mail_address;
+
+  const result = await connection.query(sql, mailAddress);
+  connection.end();
+
+  if (result.length > 0) {
+    // 個々の中でどこかのページに遷移して、秘密の質問を入力する。
+    console.log('メールアドレスが存在します。');
+  } else {
+    // メールアドレスが間違っている可能性があるので、もう一度入力してもらう。
+    console.log('メールアドレスが存在しません。');
+  }
+  console.log(result);
+  res.send(result);
+});
+
+// パスワード変更の処理2
+app.post('/checkSecretAnswer', async (req, res) => {
+  const connection = await getConnection();
+  const sql = 'SELECT user_id FROM t_user WHERE secret_id = ? AND secret_answer = ? AND mail_address = ?';
+  const secretId = req.body.secret_id;
+  const secretAnswer = req.body.secret_answer;
+  // 最終的にはさっき入力したメールアドレスを使って参照する
+  const mailAddress = req.body.mail_address;
+  const data = [secretId, secretAnswer, mailAddress];
+  const result = await connection.query(sql, data);
+
+  if (result.length > 0) {
+    // 秘密の質問が一致した場合
+    console.log('新しいパスワードを入力してください。');
+  } else {
+    // 秘密の質問が一致しない場合
+    console.log('秘密の質問か、答えが間違っています。');
+  }
+
+  connection.end();
+  console.log(result);
+  res.send(result);
+});
+
+// パスワード変更の処理3
+// 新しいパスワードを入力する段階
+app.post('/updatePassword', async (req, res) => {
+  const connection = await getConnection();
+  const sql = 'UPDATE t_user SET password = ? WHERE user_id = ?';
+  const password = req.body.password;
+
+  // 現状ではページがないので、ログインした想定で、セッションに値を入れておく。
+  req.session.user = 1;
+  const userId = req.session.user;
+  const data = [password, userId];
+  await connection.query(sql, data);
+
+  console.log('パスワードを変更しました。');
+
+  connection.end();
+});
