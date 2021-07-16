@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EyeSite -TOP-</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <h1>アカウント追加</h1>
+    <form name="account_box" id="newAccount_box">
+        <input type="mail" id="account_mail" placeholder="tanakataro1111@gmail.com" width="300px">
+        <input type="text" id="account_name" placeholder="田中太郎">
+        <input type="password" id="password">
+        <form id="question_box">
+            <input type="radio" name="secret_question" value=1 class="question" />お母さんの名前は？
+            <input type="radio" name="secret_question" value=2 class="question" />ペットの名前は？
+            <input type="radio" name="secret_question" value=3 class="question" />好きな映画は？
+            <input type="text" id="question_answer" />
+        </form>
+        <input type="submit" value="登録">
+    </form>  
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
