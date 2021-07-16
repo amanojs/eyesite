@@ -86,7 +86,13 @@ btn?.addEventListener(
     const user_id = document.querySelector<HTMLInputElement>('#user_id')?.value;
     console.log(user_id);
     // ここでAPIアクセスしてるよ sever.tsの中
-    const res = await axios.get(`http://localhost:4000/selectEyeresult?id=${user_id}`);
+    const res = await axios.get('http://localhost:4000/selectEyeresult', {
+      // APIに渡すパラメーター(引数)
+      params: {
+        id: user_id
+      }
+    });
+
     console.log(res);
   },
   false
