@@ -1,6 +1,7 @@
 import './style.css';
 import { GoogleLoader } from './modules/GoogleLoader';
 import { Maps } from './hospitalClass/Maps';
+import axios from 'axios';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -60,3 +61,29 @@ function moveMap(address: string) {
     maps.move(address);
   });
 }
+
+/** 新規アカウント登録 */
+const account_data = document.querySelector('input[type="submit"]');
+account_data?.addEventListener(
+  'click',
+  function () {
+    const mail = document.querySelector<HTMLInputElement>('#account_mail')?.value;
+    const account_name = document.querySelector<HTMLInputElement>('#account_name')?.value;
+    const question_type = document.querySelector<HTMLFormElement>('#question_box');
+    const question_value = question_type?.elements[0];
+    console.log(question_value);
+  },
+  false
+);
+
+const btn = document.querySelector<HTMLButtonElement>('#btn');
+btn?.addEventListener(
+  'click',
+  async () => {
+    const user_id = document.querySelector<HTMLInputElement>('#user_id')?.value;
+    console.log(user_id);
+    const res = await axios.get(`http://localhost:4000/selectEyeresult?id=${user_id}`);
+    console.log(res);
+  },
+  false
+);
