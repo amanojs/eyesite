@@ -76,7 +76,10 @@ account_data?.addEventListener(
   false
 );
 
+// APIアクセス処理
 const btn = document.querySelector<HTMLButtonElement>('#btn');
+
+// html側のid(btn)がクリックされた時の処理
 btn?.addEventListener(
   'click',
   async () => {
