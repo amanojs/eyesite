@@ -1,7 +1,6 @@
 import express from 'express';
 import * as mysql from 'promise-mysql';
 import session from 'express-session';
-import { nextTick } from 'process';
 
 const app: express.Express = express();
 const PORT = 4000;
@@ -112,20 +111,20 @@ app.get('/login', async (req, res) => {
     req.session.name = result[0].nickname;
     console.log(result.length);
   } else {
-    res.send(false);
     console.log('session入ってないよ');
+    return false;
     //res.render('/login');
   }
   console.log(req.session.name, req.session.user);
   sessionCheck(req, res);
-  res.send(result);
+  res.send();
   connection.end();
 });
 
 //ログインpost:ver
 app.post('/loginpost', async (req, res) => {
   const connection = await getConnection();
-  const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
+  const sql = 'SELECT user_id, nickname FROM t_user WHERE mail_address = ? AND password = ?;';
   const mailAddress = req.body.mailaddress;
   const password = req.body.password;
   const data = [mailAddress, password];
@@ -144,7 +143,7 @@ app.post('/loginpost', async (req, res) => {
     return false;
     //res.render('/login');
   }
-  res.send(result);
+  res.send(result.user_id);
   console.log(req.session.name, req.session.user);
   connection.end();
   sessionCheck(req, res);
