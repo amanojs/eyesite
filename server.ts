@@ -4,7 +4,6 @@ import session from 'express-session';
 
 const app: express.Express = express();
 const PORT = 4000;
-const cors = require('cors');
 require('dotenv').config({ debug: true });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,7 +17,6 @@ app.use(
     }
   })
 );
-app.use(cors());
 
 //sessionの型の宣言
 declare module 'express-session' {
@@ -56,7 +54,6 @@ app.get('/', (req, res) => {
 // Selectのテスト
 // 基本的にSQL文の変数にちゃんとしたSQL文を入れて実行するだけ
 app.get('/select', async (req, res) => {
-  console.log('select');
   const connection = await getConnection();
   const sql = 'select * from m_secret_question';
   const result = await connection.query(sql);
