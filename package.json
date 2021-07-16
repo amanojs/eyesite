@@ -11,6 +11,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "nodemon": "^2.0.12",
     "promise-mysql": "^5.0.3",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4"
