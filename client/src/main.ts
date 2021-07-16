@@ -76,13 +76,23 @@ account_data?.addEventListener(
   false
 );
 
+// APIアクセス処理
 const btn = document.querySelector<HTMLButtonElement>('#btn');
+
+// html側のid(btn)がクリックされた時の処理
 btn?.addEventListener(
   'click',
   async () => {
     const user_id = document.querySelector<HTMLInputElement>('#user_id')?.value;
     console.log(user_id);
-    const res = await axios.get(`http://localhost:4000/selectEyeresult?id=${user_id}`);
+    // ここでAPIアクセスしてるよ sever.tsの中
+    const res = await axios.get('http://localhost:4000/selectEyeresult', {
+      // APIに渡すパラメーター(引数)
+      params: {
+        id: user_id
+      }
+    });
+
     console.log(res);
   },
   false

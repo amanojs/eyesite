@@ -1,10 +1,10 @@
 import express from 'express';
 import * as mysql from 'promise-mysql';
 import session from 'express-session';
+import cors from 'cors';
 
 const app: express.Express = express();
 const PORT = 4000;
-const cors = require('cors');
 require('dotenv').config({ debug: true });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
