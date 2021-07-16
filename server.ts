@@ -52,52 +52,10 @@ app.get('/', (req, res) => {
   res.send('HelloWorld');
 });
 
-// Selectのテスト
-// 基本的にSQL文の変数にちゃんとしたSQL文を入れて実行するだけ
-app.get('/select', async (req, res) => {
-  const connection = await getConnection();
-  const sql = 'select * from m_secret_question';
-  const result = await connection.query(sql);
-  connection.end();
-  res.send(result);
-});
-
-// Insertのテスト、プリペアドステートメントは問題なく出来た
-// 書き方が不細工なので、後でかっこよくしたい
-app.get('/insert', async (req, res) => {
-  const connection = await getConnection();
-  const sql = 'INSERT INTO t_eye_test_result(eye_test_date, eye_test_score, user_id, eye_way) VALUES(?, ?, ?, ?)';
-
-  const time = '2021-06-30-16:00:00';
-  const userId = 2;
-  const score = 300;
-  const eyeWay = 0;
-  const data = [time, score, userId, eyeWay];
-
-  const result = await connection.query(sql, data);
-  connection.end();
-  res.send(result);
-});
-
-app.get('/insert', async (req, res) => {
-  const connection = await getConnection();
-  const sql = 'INSERT INTO t_eye_test_result(eye_test_date, eye_test_score, user_id, eye_way) VALUES(?, ?, ?, ?)';
-
-  const time = '2021-06-30-16:00:00';
-  const userId = 2;
-  const score = 300;
-  const eyeWay = 0;
-  const data = [time, score, userId, eyeWay];
-
-  const result = await connection.query(sql, data);
-  connection.end();
-  res.send(result);
-});
-
 //ログイン
 app.get('/login', async (req, res) => {
   const connection = await getConnection();
-  const sql = 'SELECT * FROM t_user WHERE mail_address = ? AND password = ?;';
+  const sql = 'SELECT user_id, nickname FROM t_user WHERE mail_address = ? AND password = ?;';
   const mailAddress = 'yamaso@gmail.com';
   const password = 12345;
   const data = [mailAddress, password];
@@ -115,10 +73,10 @@ app.get('/login', async (req, res) => {
     return false;
     //res.render('/login');
   }
+  res.status(200).send(result[0].user_id.toString());
   console.log(req.session.name, req.session.user);
-  sessionCheck(req, res);
-  res.send();
   connection.end();
+  sessionCheck(req, res);
 });
 
 //ログインpost:ver
@@ -143,7 +101,7 @@ app.post('/loginpost', async (req, res) => {
     return false;
     //res.render('/login');
   }
-  res.send(result.user_id);
+  res.status(200).send(result[0].user_id.toString());
   console.log(req.session.name, req.session.user);
   connection.end();
   sessionCheck(req, res);
