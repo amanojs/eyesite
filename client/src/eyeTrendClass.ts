@@ -14,17 +14,20 @@ export class EyeTrend {
   //グラフで使う左目の配列
   public rightGraph: number[];
   //グラフの日付
-  //public date: string;
+  //public dataGraph: string[]; 引数で入手する場合
+  //public date: string; そうじゃない場合
   constructor(left: number[], right: number[], leftGraph: number[], rightGraph: number[]) {
-    //this.date = date;
     this.left = left;
     this.right = right;
     this.leftResult = 0;
     this.rightResult = 0;
     this.leftGraph = leftGraph;
     this.rightGraph = rightGraph;
+    //this.dataGraph = dataGraph; 引数で入手する場合
+    //this.date = date; そうじゃない場合
   }
   //値の取得
+  //get(): void {}
   //左目の傾向
   leftTrend(): void {
     //今回の値 popで配列の後ろの値からとってくる
