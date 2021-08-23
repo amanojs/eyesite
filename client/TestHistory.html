@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EyeSite -TestHistory-</title>
+    <link rel="stylesheet" href="src/client/css/TestHistoryStyle.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- Form予定でしたが、入力値を別ページに引き渡す方法が分かりませんでした。 -->
+  <!-- <form id="form1" name="nextPage" method="get"> -->
+    <label>ユーザーID：
+      <input type="text" id="titleInput" data-placement="titleArea" autocomplete="off" required />
+    </label>
+    <div id="titleArea"></div>
+    <ul id="result"></ul>
+    <button id="send" data-placement="buttonArea">履歴表示</button>  
+    <!-- Form終了予定 -->
+    <!-- </form> -->
+    <script type="module" src="src/client/TestHistory.ts"></script>
+    
+    <!-- ページ再読み込みで代用 -->
+    <form id="formReset" action="/selectEyeresult" method="get">
+        <input type="submit" value="ページ再読込" />
+    </form>
+    <a href="/">インデックス</a>
+  </body>
+</html>
