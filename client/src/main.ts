@@ -15,9 +15,6 @@ const divMap = document.querySelector<HTMLDivElement>('#map');
 /** 病院検索で受け取ったオブジェクトを格納するための変数 */
 let hos_data: google.maps.places.PlaceResult[] | null;
 
-// 住所の格納場所の親要素取得
-const hospital_box = document.querySelector<HTMLDivElement>('#hospital_box');
-
 /** Mapsクラスを実体化 */
 const maps = new Maps(divMap);
 
@@ -35,19 +32,31 @@ GoogleLoader.load().then(async () => {
   if (hos_data) {
     // 取得した病院データの数だけ繰り返す
     for (let i = 0; i < hos_data?.length; i++) {
+      const hos_name = document.createElement('div');
       const elem = document.createElement('div');
       // 生成されたHTML要素がクリックされた時の処理
+      hos_name.onclick = () => {
+        if (hos_data) {
+          moveMap(hos_data[i].formatted_address || 'undefind');
+        }
+      };
       elem.onclick = () => {
         if (hos_data) {
           moveMap(hos_data[i].formatted_address || 'undefind');
         }
       };
       // id
+      hos_name.id = 'hos_name' + i;
       elem.id = 'hos_address' + i;
       // テキスト内容
       const hospital_address = hos_data[i].formatted_address;
-      if (hospital_address) {
+      const hospital_name = hos_data[i].name;
+      const hospital_box = document.querySelector<HTMLDivElement>('#hospital_box' + i);
+
+      if (hospital_address && hospital_name) {
+        hos_name.innerHTML = hospital_name;
         elem.innerHTML = hospital_address;
+        hospital_box?.appendChild(hos_name);
         hospital_box?.appendChild(elem);
       }
     }
@@ -63,15 +72,40 @@ function moveMap(address: string) {
 }
 
 /** 新規アカウント登録 */
-const account_data = document.querySelector('input[type="submit"]');
+const account_data = document.querySelector<HTMLButtonElement>('#account_data');
 account_data?.addEventListener(
   'click',
   function () {
     const mail = document.querySelector<HTMLInputElement>('#account_mail')?.value;
     const account_name = document.querySelector<HTMLInputElement>('#account_name')?.value;
-    const question_type = document.querySelector<HTMLFormElement>('#question_box');
-    const question_value = question_type?.elements[0];
-    console.log(question_value);
+
+    const elements = document.getElementsByName('secret_question');
+    const len = elements.length;
+    console.log(len);
+
+    console.log(1);
+    alert('登録が完了しました');
+    location.href = 'login.html';
+    console.log(2);
+  },
+  false
+);
+
+const login_data = document.querySelector<HTMLButtonElement>('#login_data');
+login_data?.addEventListener(
+  'click',
+  function () {
+    const mail = document.querySelector<HTMLInputElement>('#account_mail')?.value;
+    const account_name = document.querySelector<HTMLInputElement>('#account_name')?.value;
+
+    const elements = document.getElementsByName('secret_question');
+    const len = elements.length;
+    console.log(len);
+
+    console.log(1);
+    alert('ログインしました');
+    location.href = 'index.html';
+    console.log(2);
   },
   false
 );
@@ -92,7 +126,6 @@ btn?.addEventListener(
         id: user_id
       }
     });
-
     console.log(res);
   },
   false

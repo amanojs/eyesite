@@ -11,18 +11,28 @@
 
     <h1>アカウント追加</h1>
     <form name="account_box" id="newAccount_box">
-        <input type="mail" id="account_mail" placeholder="tanakataro1111@gmail.com" width="300px">
+        <h2 id="mail_title">登録するメールアドレス</h2>
+        <input type="text" id="account_mail" placeholder="tanakataro1111@gmail.com">
+        <hr />
+        <h2 id="account_name_title">登録するニックネーム</h2>
         <input type="text" id="account_name" placeholder="田中太郎">
+        <hr />
+        <h2 id="password_title">登録するパスワード</h2> 
         <input type="password" id="password">
-        <form id="question_box">
-            <input type="radio" name="secret_question" value=1 class="question" />お母さんの名前は？
-            <input type="radio" name="secret_question" value=2 class="question" />ペットの名前は？
-            <input type="radio" name="secret_question" value=3 class="question" />好きな映画は？
-            <input type="text" id="question_answer" />
-        </form>
-        <input type="submit" value="登録">
+        <hr />
+        <h2 id="radio_title">登録する秘密の質問のジャンルを選択してください</h2> 
+        <input type="radio" name="secret_question" value=1 class="question" />お母さんの名前は？
+        <input type="radio" name="secret_question" value=2 class="question" />ペットの名前は？
+        <input type="radio" name="secret_question" value=3 class="question" />好きな映画は？
+        <hr />
+        <h2 id="ans_title">答えを入力してください</h2>
+        <input type="text" id="question_answer" />
+        <br />
+        <hr>
+        <input type="button" value="登録" id="account_data">
     </form>  
 
     <script type="module" src="/src/main.ts"></script>
+    <link rel="stylesheet" href="src/addAccount.css">
   </body>
 </html>
