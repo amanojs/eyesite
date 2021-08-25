@@ -72,7 +72,7 @@ function moveMap(address: string) {
 }
 
 /** 新規アカウント登録 */
-const account_data = document.querySelector('input[type="button"]');
+const account_data = document.querySelector<HTMLButtonElement>('#account_data');
 account_data?.addEventListener(
   'click',
   function () {
@@ -86,6 +86,25 @@ account_data?.addEventListener(
     console.log(1);
     alert('登録が完了しました');
     location.href = 'login.html';
+    console.log(2);
+  },
+  false
+);
+
+const login_data = document.querySelector<HTMLButtonElement>('#login_data');
+login_data?.addEventListener(
+  'click',
+  function () {
+    const mail = document.querySelector<HTMLInputElement>('#account_mail')?.value;
+    const account_name = document.querySelector<HTMLInputElement>('#account_name')?.value;
+
+    const elements = document.getElementsByName('secret_question');
+    const len = elements.length;
+    console.log(len);
+
+    console.log(1);
+    alert('ログインしました');
+    location.href = 'index.html';
     console.log(2);
   },
   false
