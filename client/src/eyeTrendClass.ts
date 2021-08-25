@@ -1,6 +1,7 @@
 import $ from 'jquery'; //jqueryの適用
 import { Chart } from './chart'; //chartの適用 グラフ描画
 import moment from 'moment';
+import axios from 'axios';
 
 export class EyeTrend {
   //左目の配列
@@ -27,7 +28,18 @@ export class EyeTrend {
     //this.date = date; そうじゃない場合
   }
   //値の取得
-  //get(): void {}
+  getDate(): void {
+    async () => {
+      const user_id = document.querySelector<HTMLInputElement>('#user_id')?.value;
+      console.log(user_id);
+      const res = await axios.get('http://localhost:4000/selectEyeresult', {
+        params: {
+          id: user_id
+        }
+      });
+      console.log(res);
+    };
+  }
   //左目の傾向
   leftTrend(): void {
     //今回の値 popで配列の後ろの値からとってくる
