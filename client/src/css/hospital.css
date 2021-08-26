@@ -1,0 +1,295 @@
+#hos_wrap {
+    width: 100%;
+    margin: 0;
+    display: flex;
+}
+
+#hospital_box0 {
+    z-index: 1;
+    margin-top: 0;
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address0 {
+    z-index: 1;
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box1 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address1 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box2 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address2 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box3 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address3 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box4 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address4 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box5 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address5 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box6 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address6 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box7 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address7 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box8 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address8 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box9 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address9 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box10 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address10 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box11 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address11 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box12 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address12 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box13 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address13 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box14 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address14 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box15 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address15 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box16 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address16 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box17 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address17 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box18 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address18 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+#hospital_box19 {
+    background-color: rgb(0, 225, 255);
+    color: aliceblue;
+    width: 300px;
+    border: 1px solid aliceblue;
+}
+#hos_address19 {
+    background-color: rgb(8, 90, 214);
+    font-size: 0.8em;
+    height: 70px;
+    margin-bottom: 20px;
+    border-top: 1px solid aliceblue;
+}
+
+/* 画面全体のサイズに合わせた背景アニメーションのサイズ調整が
+できないためサイズの合わない個々のページの下から出てくる位置を下げる
+その際common.cssの読み込みを他のcssよりも先にしてください */
+.circles{
+    height: 200%;
+}
